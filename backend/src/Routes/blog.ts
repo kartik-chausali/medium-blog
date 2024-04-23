@@ -4,6 +4,7 @@ import { Hono } from "hono";
 import { verify } from "hono/jwt";
 
 import {createBlogInput, updateBlogInput} from '@100xdevs/medium-common'
+import { getCookie, setCookie } from "hono/cookie";
 
 export const blogRouter = new Hono<{
     Bindings:{
@@ -17,7 +18,10 @@ export const blogRouter = new Hono<{
 
 //middleware
 blogRouter.use('/*', async (c,next)=>{
-    const header = c.req.header("authorization") || "";
+    // const header = c.req.header("authorization") || "";
+    const header =  c.res.headers.get('Set-Cookie') || "";
+    console.log('in middleware')
+    console.log(header)
     // if Bearer token => ["Bearer", "token"]
     const response = await verify(header, c.env.JWT_SECRET);
     if(response){
@@ -41,16 +45,24 @@ blogRouter.post('/', async(c) => {
         c.status(411);
         return c.json("invalid format to create blog")
     } 
-    const authorId = c.get("userId");
+    try{
+        const authorId = c.get("userId");
 
-    const blog = await prisma.blog.create({
-        data:{
-            tittle: body.tittle,
-            content: body.content,
-            authorId: authorId
-        }
-    })
-    return c.json({id: blog.id});
+        const blog = await prisma.blog.create({
+            data:{
+                tittle: body.tittle,
+                content: body.content,
+                authorId: authorId
+            }
+        })
+
+        return c.json({id: blog.id});
+
+    }catch(err){
+        c.status(411)
+        return c.json({mssg:"error while creating blog"})
+    }
+   
   })
   
   blogRouter.put('/', async(c) => {
@@ -64,7 +76,8 @@ blogRouter.post('/', async(c) => {
         c.status(411);
         return c.json("invalid format to update blog");
     }
-    const blog = await prisma.blog.update({
+    try{
+       const blog = await prisma.blog.update({
         where:{
             id: body.id
         },
@@ -74,7 +87,12 @@ blogRouter.post('/', async(c) => {
         }
     })
 
-    return c.json({id: blog.id})
+    return c.json({id: blog.id})  
+    }catch(err){
+        c.status(411);
+        c.json({mssg:"error while updating the blog"})
+    }
+   
   })
   
   blogRouter.get('/single/:id', async(c) => {
@@ -87,10 +105,22 @@ blogRouter.post('/', async(c) => {
         const blog = await prisma.blog.findFirst({
             where:{
                 id: id
+            },
+            select:{
+                id:true,
+                tittle:true,
+                content:true,
+                image:true,
+                createdAt:true,
+                author:{
+                    select:{
+                        name:true
+                    }
+                }
             }
         })
     
-        return c.json(blog)
+        return c.json({blog})
 
     }catch(e){
         c.status(411);
@@ -106,7 +136,27 @@ blogRouter.post('/', async(c) => {
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate())
 
-    const blogs = await prisma.blog.findMany();
+    try{
+         const blogs = await prisma.blog.findMany({
+            select:{
+                tittle:true,
+                content:true,
+                id:true,
+                createdAt:true,
+                author:{
+                select:{
+                    name:true
+                }
+                }
+            }
+        });
 
-    return c.json({blogs})
+        return c.json({blogs})
+
+    }catch(e){
+        console.log(e);
+        c.status(411);
+        return c.json("Error while fetching all blogs")
+    }
+   
   })
