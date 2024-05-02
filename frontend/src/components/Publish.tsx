@@ -58,24 +58,33 @@ export const Publish =()=>{
       }
 
     return <form onSubmit={createNewBlog}>
-          <input placeholder='tittle' type='text' onChange={(e)=>{
+        <div className='flex flex-col'>
+                <input className="border border-black p-4 mt-5" placeholder='TITTLE' type='text' onChange={(e)=>{
             setInputs({
                 ...inputs,
                 tittle:e.target.value
             })
         }}/>
-        <input type='file' onChange={(e)=>{
+        <input className='mt-4 border ' type='file' onChange={(e)=>{
             setInputs({
                 ...inputs,
                file: e.target.files || ""
             })
         }}/>
-        <ReactQuill  theme='snow' value = {inputs.content} modules={modules} formats={formats} onChange={(newValue)=>{
+        
+        <ReactQuill className='h-40 w-full mt-4' theme='snow' value = {inputs.content} modules={modules} formats={formats} onChange={(newValue)=>{
             setInputs({
                 ...inputs,
                 content: newValue
             })
         }}/>
-        <button>Create Blog</button>
+        <div className='flex justify-center mt-5'>
+         <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-10 w-1/2  ">
+        Post
+        </button>    
+        </div>
+        
+        </div>
+     
     </form>
 }

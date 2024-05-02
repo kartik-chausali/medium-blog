@@ -4,7 +4,7 @@ import { Dropdown } from "./Dropdown"
 export const AppBar = ()=>{
 
     return <div className="flex justify-between border-b px-10 py-4">
-        <Link to={'/blogs'} className="flex flex-col justify-center">
+        <Link to={'/blogs'} className="flex flex-col justify-center font-extrabold text-3xl">
             Medium
         </Link>
         <div className="flex  justify-center">

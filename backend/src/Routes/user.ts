@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { PrismaClient } from "@prisma/client/edge";
 import { withAccelerate } from "@prisma/extension-accelerate";
-import { sign, verify } from "hono/jwt";
+import { decode, sign, verify } from "hono/jwt";
 import {signinInput, signupInput} from '@100xdevs/medium-common'
 import { getCookie, setCookie } from "hono/cookie";
 
@@ -12,9 +12,12 @@ export const userRouter = new Hono<{
     }
 }>();
 
-userRouter.use('/signout', async (c,next)=>{
+
+userRouter.use('/signout' && '/me' , async (c,next)=>{
   // const header = c.req.header("authorization") || "";
-  const header = getCookie(c, 'token') || ""
+  console.log("in user middleware")
+  const header = c.req.header('authorization')|| "";
+  console.log(header)
   // if Bearer token => ["Bearer", "token"]
   const response = await verify(header, c.env.JWT_SECRET);
   if(response){
@@ -63,6 +66,7 @@ userRouter.post('/signup', async (c) => {
   })
   
   userRouter.post('/signin', async (c) => {
+
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate());
@@ -84,32 +88,81 @@ userRouter.post('/signup', async (c) => {
     return c.json({mssg: "user not found"});
    }
     
-   const jwt = await sign({id: user.id}, c.env.JWT_SECRET)
-   c.res.headers.set('Set-Cookie', jwt);
-   console.log(c.res.headers.get('Set-Cookie'));
-   return c.json("signin")
+   const token = await sign({id: user.id}, c.env.JWT_SECRET)
+   c.res.headers.set('Cookie', token);
+   console.log(c.res.headers.get('Cookie'));
+   return c.json({
+    jwt: token
+   })
   })
 
   userRouter.post('/signout', async (c)=>{
 
-    console.log("inside signout route")
 
     const prisma = new PrismaClient({
       datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate());
 
     try{
-
-      console.log("inside try of signout")
-      localStorage.removeItem('token');
+      c.header('authorization', '')
       c.status(200)
       return c.json("logout successfull");
 
     }catch(e){
-      console.log("inside catch of signout")
-      console.log(e);
-
       c.status(411);
       return c.json("error while logging out");
     }
   })
+
+  userRouter.get('/me',  (c)=>{
+    
+
+     try{
+       const header = c.req.header('authorization')|| "";
+      const {payload} =  decode(header);
+      
+    
+      return c.json({payload})
+
+     }catch(e){
+    
+      c.status(411)
+      return c.json(e);
+     }
+
+    
+  })
+
+  userRouter.get('/:id', async(c)=>{
+
+     const primsa = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL
+     }
+     ).$extends(withAccelerate())
+
+     const id = c.req.param("id");
+
+     try{ 
+      const profile = await primsa.user.findUnique({
+        where:{
+          id: id
+        },
+        select:{
+          email:true,
+          password:true,
+          id:true,
+          name:true
+        }
+      })
+
+      return c.json(profile);
+
+     }catch(e){
+      c.status(411)
+      return c.json("error while fetching profile")
+     }
+  })
+
+
+
+  

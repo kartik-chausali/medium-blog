@@ -2,13 +2,15 @@ import {useEffect, useState} from 'react'
 import axios from 'axios'
 import {BACKEND_URL} from '../config'
 import toast from 'react-hot-toast'
+import { useNavigate } from 'react-router-dom'
 
 export interface Blog{
     tittle:string,
     content:string,
     id:string,
     author:{
-        name:string
+        name:string,
+        createdAt:string
     },
     createdAt:string
 }
@@ -44,15 +46,29 @@ export const useBlogs = ()=>{
 
     const [loading , setLoading] = useState(true);
     const [blogs, setBlogs] = useState<Blog[]>([]);
+    const [authorized , setAuthorized] = useState(true);
+    
+    const navigate = useNavigate();
+
 
     useEffect(()=>{
-        fetchBlogs({setBlogs, setLoading})
+        
+         fetchBlogs({setBlogs, setLoading, setAuthorized})
+     
+    
     },[])
 
-    return {loading, blogs}
+       if(authorized==false){
+            navigate('/signup')
+        }
+    
+       return {loading, blogs} 
+    
+    
 }
 
-async function fetchBlogs({setBlogs, setLoading} ){
+async function fetchBlogs({setBlogs, setLoading, setAuthorized} ){
+    
     try{
         const res = await axios.get(`${BACKEND_URL}/api/v1/blog/bulk`, {
             headers:{
@@ -61,8 +77,10 @@ async function fetchBlogs({setBlogs, setLoading} ){
         });
         setBlogs(res.data.blogs);
         setLoading(false);
+        setAuthorized(true);
     }catch(e){
-        toast.error(e.response.data);
+        setAuthorized(false);
+        toast.error('unauthorized');
     }
    
 }

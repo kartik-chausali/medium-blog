@@ -19,7 +19,9 @@ export const blogRouter = new Hono<{
 //middleware
 blogRouter.use('/*', async (c,next)=>{
     // const header = c.req.header("authorization") || "";
-    const header =  c.res.headers.get('Set-Cookie') || "";
+    console.log('before')
+    console.log(c.req, c.req.header);
+    const header =   c.req.header('authorization')|| "";
     console.log('in middleware')
     console.log(header)
     // if Bearer token => ["Bearer", "token"]
@@ -114,7 +116,8 @@ blogRouter.post('/', async(c) => {
                 createdAt:true,
                 author:{
                     select:{
-                        name:true
+                        name:true,
+                        createdAt:true
                     }
                 }
             }
@@ -145,10 +148,15 @@ blogRouter.post('/', async(c) => {
                 createdAt:true,
                 author:{
                 select:{
-                    name:true
+                    name:true,
+                    createdAt:true
                 }
                 }
-            }
+            },
+            orderBy:{
+               createdAt:'desc'
+            },
+           
         });
 
         return c.json({blogs})
@@ -160,3 +168,32 @@ blogRouter.post('/', async(c) => {
     }
    
   })
+
+  blogRouter.get('/profileBlogs/:id', async(c)=>{
+        const prisma= new PrismaClient({
+            datasourceUrl:c.env.DATABASE_URL
+        }).$extends(withAccelerate())
+        const userId = c.req.param('id')
+        try{
+            const blogs = await prisma.blog.findMany({
+                where:{
+                    authorId:userId || ""
+                },
+                select:{
+                    id:true,
+                    tittle:true,
+                    content:true,
+                   createdAt:true,
+                },
+                orderBy:{
+                    createdAt:'desc'
+                 }
+            })
+            return c.json(blogs)
+        }catch(e){
+            c.status(411);
+            return c.json("Error while fetching profile blogs")
+        }
+  })
+
+  

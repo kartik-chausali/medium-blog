@@ -22,7 +22,8 @@ export const Auth = ({type}: {type : "signup" | "signin"})=>{
         try{
             const response = await axios.post(`${BACKEND_URL}/api/v1/user/${type === 'signup'? 'signup':'signin'}`, inputs)
             const jwt = response.data.jwt;
-           // localStorage.setItem('token', jwt);
+            console.log('in signin', jwt)
+            localStorage.setItem('token', jwt);
             toast.success(type === 'signup' ? "Signed up successfully" : "Logged in successfully" );
             navigate('/blogs')
             
@@ -62,7 +63,7 @@ export const Auth = ({type}: {type : "signup" | "signin"})=>{
                 })
             }}/>
 
-            <LabelledInput label="Password" placeholder="password" type={"password"} onChange={(e)=>{
+            <LabelledInput label="Password" placeholder="min 6 length" type={"password"} onChange={(e)=>{
                 setInputs({
                     ...inputs,
                     password:e.target.value

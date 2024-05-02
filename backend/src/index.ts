@@ -16,6 +16,11 @@ app.use('/api/*', cors());
 app.route('/api/v1/user', userRouter);
 app.route('/api/v1/blog', blogRouter);
 
+// app.get('/api/v1/user/profile', async(c)=>{
+//   const body = await c.req.json()
+//   console.log(body);
+//   return c.json(body)
+// })
 
 export default app
 

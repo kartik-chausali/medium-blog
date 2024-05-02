@@ -5,6 +5,8 @@ import { AppBar } from "./AppBar"
 export const FullBlog = ({blog}:{blog:Blog})=>{
 
     const d = new Date(blog.createdAt)
+    const authorDate = new Date(blog.author.createdAt);
+
     return <div>
         <AppBar /> 
         <div className="flex justify-center">
@@ -35,7 +37,7 @@ export const FullBlog = ({blog}:{blog:Blog})=>{
             </div>
 
             <div className="pt-2 text-slate-500 pl-12">
-                Random catch phrase of Author
+                User since {authorDate.toLocaleDateString("en-US", {year: 'numeric', month: 'long', day: 'numeric' })} 
             </div>
             
         </div>
