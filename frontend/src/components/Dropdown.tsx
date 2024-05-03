@@ -10,9 +10,9 @@ export const Dropdown = ()=>{
     const dropdownRef = useRef(null);
     const navigate = useNavigate()
     const[id, setId] = useState('');
-
+    const[loading ,setLoading] = useState(true);
     useEffect(()=>{
-        getUserId({setId})
+        getUserId({setId, setLoading})
 
         const handleClickOutside = (event)=>{
             if(dropdownRef.current && !dropdownRef.current.contains(event.target)){
@@ -68,7 +68,7 @@ export const Dropdown = ()=>{
 </div> 
 }
 
-async function getUserId({setId}){
+export async function getUserId({setId, setLoading}){
     const res = await axios.get(`${BACKEND_URL}/api/v1/user/me`,{
         headers:{
             Authorization: localStorage.getItem('token')
@@ -76,4 +76,5 @@ async function getUserId({setId}){
     })
 
     setId(res.data.payload.id);
+    setLoading(false)
 }

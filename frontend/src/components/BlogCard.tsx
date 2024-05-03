@@ -27,8 +27,10 @@ export const BlogCard = ({
     <div className=" border-b-2 border-b-slate-200 p-6 cursor-pointer">
         <div className='flex items-center'>
             <ConfigProvider colors={['red', 'green', 'blue', 'yellow', 'purple', 'black', 'grey']}>
+                <div>
              <Avatar round={true}  size='50' alt={author} name={author} fgColor='#00FF00'/>
-             </ConfigProvider>
+             </div>
+             </ConfigProvider> 
             <div className='font-extralight pl-2'>
                 {author}
             </div>

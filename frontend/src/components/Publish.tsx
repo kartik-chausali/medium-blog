@@ -4,6 +4,7 @@ import axios from 'axios'
 import { BACKEND_URL } from '../config'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { Spinner } from './animation/Spinner'
 
 // interface input{
 //     titttle:string,
@@ -18,6 +19,7 @@ export const Publish =()=>{
         content:"",
         file:"" 
     })
+    const[loading , setLoading] = useState(false);
     
     const modules = {
         toolbar: [
@@ -42,6 +44,7 @@ export const Publish =()=>{
       async function createNewBlog(e){
         e.preventDefault()
         try{
+            setLoading(true);
              const res = await axios.post(`${BACKEND_URL}/api/v1/blog`, inputs,{
                 headers:{
                     Authorization:localStorage.getItem('token')
@@ -50,7 +53,7 @@ export const Publish =()=>{
              toast.success("Blog Posted")
             navigate('/blogs');
         }catch(err){
-            console.log(err);
+            setLoading(false);
             toast.error(err.response.data);
         }
        
@@ -80,7 +83,7 @@ export const Publish =()=>{
         }}/>
         <div className='flex justify-center mt-5'>
          <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-10 w-1/2  ">
-        Post
+        {loading? <Spinner/> : 'Post'}
         </button>    
         </div>
         
