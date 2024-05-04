@@ -14,7 +14,7 @@ export const Auth = ({type}: {type : "signup" | "signin"})=>{
     const navigate = useNavigate()
 
     const[loading , setLoading ] = useState(false);
-    const [inputs, setInputs] = useState<SignUpInput>(
+    const [inputs, setInputs] = useState<SignupInput>(
         {
             name:"",
             email:"",
