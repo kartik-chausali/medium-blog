@@ -21,7 +21,7 @@ export const useSingleBlog = ({id} :{id:string})=>{
 
     useEffect(()=>{
         fetchBlog({setBlog, setLoading, id})
-    },[])
+    },[id])
 
     return {loading, blog}
 }
