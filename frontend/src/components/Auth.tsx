@@ -3,7 +3,7 @@
 import { ChangeEvent,  useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 // import {SignupInput} from '@100xdevs/medium-common'
-import {SignUpInput} from '../../../common/dist/index'
+import {SignUpInput} from '../../../common/dist/index.js'
 import axios from "axios"
 import { BACKEND_URL } from "../config"
 import toast from "react-hot-toast"
