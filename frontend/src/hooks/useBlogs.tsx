@@ -26,7 +26,7 @@ export const useSingleBlog = ({id} :{id:string})=>{
     return {loading, blog}
 }
 
-async function fetchBlog({setBlog, setLoading, id}){
+async function fetchBlog({setBlog, setLoading, id} :{setBlog:(val:Blog)=>void, setLoading:(val:boolean)=>void , id:string}){
     try{
         const res = await axios.get(`${BACKEND_URL}/api/v1/blog/single/${id}`, {
             headers:{
@@ -36,7 +36,12 @@ async function fetchBlog({setBlog, setLoading, id}){
         setBlog(res.data.blog);
         setLoading(false);
     }catch(e){
-        toast.error(e.response.data);
+        if(axios.isAxiosError(e)){
+            toast.error(e.response?.data || "An Error occured");
+        }else{
+            toast.error("An unexpected Error Occured");
+        }
+        
     }
 }
 
@@ -67,7 +72,7 @@ export const useBlogs = ()=>{
     
 }
 
-async function fetchBlogs({setBlogs, setLoading, setAuthorized} ){
+async function fetchBlogs({setBlogs, setLoading, setAuthorized}:{setBlogs: (val:Blog[])=>void  , setLoading:(val:boolean)=>void , setAuthorized:(val:boolean)=>void} ){
     
     try{
         const res = await axios.get(`${BACKEND_URL}/api/v1/blog/bulk`, {

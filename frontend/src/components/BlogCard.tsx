@@ -1,4 +1,4 @@
-import Avatar, { ConfigProvider } from 'react-avatar'
+import Avatar from 'react-avatar'
 import 'react-quill/dist/react-quill'
 import { Link } from 'react-router-dom'
 
@@ -21,16 +21,19 @@ export const BlogCard = ({
     
     const d = new Date(createdAt); //to reformat the date
 
-
+    const colors=['red', 'green', 'blue', 'yellow', 'purple', 'black', 'grey']
+    const getRandomColor = ()=>{
+        return colors[Math.floor(Math.random()*colors.length)]
+    }
     
     return <Link to={`/blog/${id}`}> 
     <div className=" border-b-2 border-b-slate-200 p-6 cursor-pointer">
         <div className='flex items-center'>
-            <ConfigProvider colors={['red', 'green', 'blue', 'yellow', 'purple', 'black', 'grey']}>
-                <div>
-             <Avatar round={true}  size='50' alt={author} name={author} fgColor='#00FF00'/>
-             </div>
-             </ConfigProvider> 
+            
+                
+             <Avatar round={true}  size='50' alt={author} name={author} fgColor='#00FF00' color={getRandomColor()}/>
+             
+           
             <div className='font-extralight pl-2'>
                 {author}
             </div>

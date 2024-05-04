@@ -55,9 +55,8 @@ export const Profile = ()=>{
                 <div className="flex">
                 <input ref={inputRef} type="password" id="success" className="bg-green-50 border border-green-500 text-green-900 dark:text-green-400 placeholder-green-700 dark:placeholder-green-500 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block w-80 p-2.5 dark:bg-gray-700 dark:border-green-500" value={profile?.password}/>
                 <button ref={buttonTextRef} className="ml-2 h-7 mt-2 bg-gray-300 hover:bg-gray-400 rounded px-2 py-1 text-sm text-gray-600 font-mono cursor-pointer " onClick={()=>{
-                    
-                       if(inputRef.current.type == 'text'){
-
+                        
+                       if(inputRef.current?.type == 'text'){
                        inputRef.current.type = 'password'; 
                        if(buttonTextRef.current){
                         buttonTextRef.current.innerText = buttonTextRef.current.innerText == 'Show' ? "Hide" : "Show"

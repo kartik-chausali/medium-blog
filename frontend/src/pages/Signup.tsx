@@ -7,8 +7,8 @@ export const Signup = () =>{
         <div>
             <Auth type="signup" />
         </div>
-    <div className="invisible sm:visible sm:ml-10">
-        <TypingAnimation /> 
+    <div className="invisible sm:visible sm:ml-10 ">
+        <TypingAnimation height={"screen"}/> 
     </div>
    
     </div>

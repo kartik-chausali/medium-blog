@@ -6,7 +6,7 @@ import { Skeleton } from "../components/animation/Skeleton";
 export const Blog = () =>{
     const { id } = useParams();
     const {loading, blog} = useSingleBlog({id : id || ""});
-    if(loading){
+    if(loading || !blog){
         <Skeleton />
     }else{
          return <div>

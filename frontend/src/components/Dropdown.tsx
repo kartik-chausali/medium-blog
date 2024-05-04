@@ -1,5 +1,7 @@
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from "axios";
-import { ChangeEvent, useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { BACKEND_URL } from "../config";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,17 +9,21 @@ import { Link, useNavigate } from "react-router-dom";
 export const Dropdown = ()=>{
 
     const [isOpen , setOpen] = useState(false);
-    const dropdownRef = useRef(null);
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
     const navigate = useNavigate()
     const[id, setId] = useState('');
     const[loading ,setLoading] = useState(true);
+
     useEffect(()=>{
         getUserId({setId, setLoading})
 
-        const handleClickOutside = (event)=>{
-            if(dropdownRef.current && !dropdownRef.current.contains(event.target)){
+        const handleClickOutside = (event : MouseEvent)=>{
+            
+                if(dropdownRef.current && !dropdownRef.current.contains(event.target as Node)){
                 setOpen(false);
-            }
+                }
+            
+            
         }
         document.addEventListener('mousedown', handleClickOutside);
         
@@ -68,7 +74,7 @@ export const Dropdown = ()=>{
 </div> 
 }
 
-export async function getUserId({setId, setLoading}){
+export async function getUserId({setId, setLoading}:{setId: (val:string)=>void , setLoading:(val:boolean)=>void}){
     const res = await axios.get(`${BACKEND_URL}/api/v1/user/me`,{
         headers:{
             Authorization: localStorage.getItem('token')

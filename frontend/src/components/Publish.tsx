@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import ReactQuill from 'react-quill'
-import {useRef, useState} from 'react'
+import { FormEvent, useState} from 'react'
 import axios from 'axios'
 import { BACKEND_URL } from '../config'
 import toast from 'react-hot-toast'
@@ -17,7 +18,7 @@ export const Publish =()=>{
     const [inputs , setInputs] = useState({
         tittle:"",
         content:"",
-        file:"" 
+       
     })
     const[loading , setLoading] = useState(false);
     
@@ -41,7 +42,7 @@ export const Publish =()=>{
         'link', 'image'
       ]
 
-      async function createNewBlog(e){
+      async function createNewBlog(e : FormEvent){
         e.preventDefault()
         try{
             setLoading(true);
@@ -52,9 +53,13 @@ export const Publish =()=>{
              });
              toast.success("Blog Posted")
             navigate('/blogs');
-        }catch(err){
+        }catch(err : unknown){
             setLoading(false);
-            toast.error(err.response.data);
+            if(axios.isAxiosError(err)){
+                toast.error(err.response?.data || "An error occured");
+            }else{
+                toast.error("Unexpected Error Occured")
+            }
         }
        
 
@@ -68,12 +73,7 @@ export const Publish =()=>{
                 tittle:e.target.value
             })
         }}/>
-        <input className='mt-4 border ' type='file' onChange={(e)=>{
-            setInputs({
-                ...inputs,
-               file: e.target.files || ""
-            })
-        }}/>
+       
         
         <ReactQuill className='h-40 w-full mt-4' theme='snow' value = {inputs.content} modules={modules} formats={formats} onChange={(newValue)=>{
             setInputs({

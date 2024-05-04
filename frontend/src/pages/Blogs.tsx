@@ -12,7 +12,7 @@ export const Blogs = ()=>{
     const blogsPerPage = 3;
     const totalpages = Math.ceil(blogs.length/blogsPerPage);
 
-    const handlePageChange = (page)=>{
+    const handlePageChange = (page:number)=>{
         setCurrentPage(page)
     }
 
@@ -44,7 +44,7 @@ export const Blogs = ()=>{
     <div className="justify-center max-w-3xl w-1/2">
 
         {getVisibleBlogs().map(blog=>
-            <BlogCard id={blog.id} author={blog.author.name || "anonymous"} tittle={blog.tittle} content={blog.content} createdAt={blog.createdAt} authorCreatedAt={blog.author.createdAt}/>
+            <BlogCard id={blog.id} author={blog.author.name || "anonymous"} tittle={blog.tittle} content={blog.content} createdAt={blog.createdAt} />
         )}
         
     <div className="flex justify-center">
