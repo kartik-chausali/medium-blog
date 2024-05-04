@@ -46,7 +46,7 @@ export const Publish =()=>{
         e.preventDefault()
         try{
             setLoading(true);
-             const res = await axios.post(`${BACKEND_URL}/api/v1/blog`, inputs,{
+              await axios.post(`${BACKEND_URL}/api/v1/blog`, inputs,{
                 headers:{
                     Authorization:localStorage.getItem('token')
                 }

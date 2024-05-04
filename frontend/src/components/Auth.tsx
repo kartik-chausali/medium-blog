@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeEvent, useContext, useState } from "react"
+import { ChangeEvent,  useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import {SignupInput} from '@100xdevs/medium-common'
-import axios, { AxiosError } from "axios"
+import axios from "axios"
 import { BACKEND_URL } from "../config"
 import toast from "react-hot-toast"
 import { Spinner } from "./animation/Spinner"
@@ -94,7 +94,7 @@ interface labelledInputsType {
 
 function LabelledInput({label, placeholder, onChange, type}: labelledInputsType){
     return <div>
-    <label  className="block mb-2 text-sm font-semibold text-gray-900 text-black pt-4">{label}</label>
+    <label  className="block mb-2 text-sm font-semibold \ text-black pt-4">{label}</label>
     <input onChange={onChange} type={type || ""} id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={placeholder} required />
 </div>
 }

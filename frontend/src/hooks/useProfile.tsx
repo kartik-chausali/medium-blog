@@ -28,7 +28,7 @@ export const useProfile = ({id}:{id:string})=>{
     return {loading, profile}
 }
 
-async function fetchProfile({setLoading, setProfile, id}){
+async function fetchProfile({setLoading, setProfile, id}:{setLoading:(val:boolean)=>void , setProfile:(val:Profile)=>void , id:string}){
 
     try{
          const res = await axios.get(`${BACKEND_URL}/api/v1/user/${id}`, {
@@ -40,7 +40,12 @@ async function fetchProfile({setLoading, setProfile, id}){
     setLoading(false)
 
     }catch(e){
-        toast.error(e.response.data);
+        if(axios.isAxiosError(e)){
+            toast.error(e.response?.data || "An error occured");
+        }else{
+            toast.error("An unexpected error occurered")
+        }
+        
     }
    
 }   
@@ -57,7 +62,7 @@ export const useProfileBlogs = ({id}:{id:string})=>{
     return {profileBlogs}
 }
 
-async function fetchProfileBlogs({setProfileBlogs, id}){
+async function fetchProfileBlogs({setProfileBlogs, id} : {setProfileBlogs:(val : ProfileUserBlogs[])=>void, id:string}){
         const res = await axios.get(`${BACKEND_URL}/api/v1/blog/profileBlogs/${id}`,{
             headers:{
                 Authorization:localStorage.getItem('token')
