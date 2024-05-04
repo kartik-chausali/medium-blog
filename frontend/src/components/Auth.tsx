@@ -2,7 +2,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeEvent,  useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import {SignupInput} from '@100xdevs/medium-common'
+// import {SignupInput} from '@100xdevs/medium-common'
+import {SignUpInput} from '../../../common/dist/index'
 import axios from "axios"
 import { BACKEND_URL } from "../config"
 import toast from "react-hot-toast"
@@ -14,7 +15,7 @@ export const Auth = ({type}: {type : "signup" | "signin"})=>{
     const navigate = useNavigate()
 
     const[loading , setLoading ] = useState(false);
-    const [inputs, setInputs] = useState<SignupInput>(
+    const [inputs, setInputs] = useState<SignUpInput>(
         {
             name:"",
             email:"",
@@ -95,6 +96,6 @@ interface labelledInputsType {
 function LabelledInput({label, placeholder, onChange, type}: labelledInputsType){
     return <div>
     <label  className="block mb-2 text-sm font-semibold \ text-black pt-4">{label}</label>
-    <input onChange={onChange} type={type || ""} id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={placeholder}  />
+    <input onChange={onChange} type={type || ""} id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={placeholder} required />
 </div>
 }
