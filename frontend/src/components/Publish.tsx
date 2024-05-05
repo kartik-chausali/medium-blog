@@ -16,7 +16,7 @@ import { Spinner } from './animation/Spinner'
 export const Publish =()=>{
     const navigate = useNavigate()
     const [inputs , setInputs] = useState({
-        tittle:"",
+        title:"",
         content:"",
        
     })
@@ -70,7 +70,7 @@ export const Publish =()=>{
                 <input className="border border-black p-4 mt-5" placeholder='TITTLE' type='text' onChange={(e)=>{
             setInputs({
                 ...inputs,
-                tittle:e.target.value
+                title:e.target.value
             })
         }}/>
        

@@ -52,7 +52,7 @@ blogRouter.post('/', async(c) => {
 
         const blog = await prisma.blog.create({
             data:{
-                tittle: body.tittle,
+                tittle: body.title,
                 content: body.content,
                 authorId: authorId
             }
@@ -84,7 +84,7 @@ blogRouter.post('/', async(c) => {
             id: body.id
         },
         data:{
-            tittle: body.tittle,
+            tittle: body.title,
             content: body.content
         }
     })

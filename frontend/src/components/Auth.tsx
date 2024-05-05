@@ -17,7 +17,7 @@ export const Auth = ({type}: {type : "signup" | "signin"})=>{
     const [inputs, setInputs] = useState<SignupInput>(
         {
             name:"",
-            email:"",
+            username:"",
             password:""
         }
     )   
@@ -65,7 +65,7 @@ export const Auth = ({type}: {type : "signup" | "signin"})=>{
             <LabelledInput label="Username" placeholder="user@example.com" onChange={(e)=>{
                 setInputs({
                     ...inputs,
-                    email:e.target.value
+                    username:e.target.value
                 })
             }}/>
 
